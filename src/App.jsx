@@ -3,6 +3,7 @@ import Header from './components/Header'
 import ProductList from './components/ProductList'
 import Cart from './components/Cart'
 import ToastContainer from './components/ToastContainer'
+import ProductModal from './components/ProductModal'
 
 const CART_STORAGE_KEY = 'internet-shop-cart'
 const THEME_STORAGE_KEY = 'internet-shop-theme'
@@ -18,6 +19,7 @@ function App() {
     return savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)
   })
   const [toasts, setToasts] = useState([])
+  const [selectedProduct, setSelectedProduct] = useState(null)
 
   // Функция для добавления тоста
   const showToast = useCallback((message, type = 'success', duration = 3000) => {
@@ -120,7 +122,10 @@ function App() {
         onToggleTheme={() => setIsDarkMode(!isDarkMode)}
       />
       <main className="container mx-auto px-4 py-8">
-        <ProductList onAddToCart={addToCart} />
+        <ProductList 
+          onAddToCart={addToCart}
+          onProductClick={setSelectedProduct}
+        />
       </main>
       <Cart
         isOpen={isCartOpen}
@@ -128,6 +133,12 @@ function App() {
         items={cartItems}
         onRemove={removeFromCart}
         onUpdateQuantity={updateQuantity}
+      />
+      <ProductModal
+        isOpen={selectedProduct !== null}
+        onClose={() => setSelectedProduct(null)}
+        product={selectedProduct}
+        onAddToCart={addToCart}
       />
       <ToastContainer toasts={toasts} onRemove={removeToast} />
     </div>

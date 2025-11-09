@@ -46,7 +46,7 @@ const products = [
   },
 ]
 
-function ProductList({ onAddToCart }) {
+function ProductList({ onAddToCart, onProductClick }) {
   const [searchTerm, setSearchTerm] = useState('')
 
   const filteredProducts = products.filter(product =>
@@ -70,6 +70,7 @@ function ProductList({ onAddToCart }) {
             key={product.id}
             product={product}
             onAddToCart={onAddToCart}
+            onProductClick={onProductClick}
           />
         ))}
       </div>

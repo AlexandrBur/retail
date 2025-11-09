@@ -1,4 +1,4 @@
-function ProductCard({ product, onAddToCart }) {
+function ProductCard({ product, onAddToCart, onProductClick }) {
   const formatPrice = (price) => {
     return new Intl.NumberFormat('ru-RU', {
       style: 'currency',
@@ -7,8 +7,19 @@ function ProductCard({ product, onAddToCart }) {
     }).format(price)
   }
 
+  const handleCardClick = (e) => {
+    // Не открываем модальное окно, если клик был на кнопке
+    if (e.target.closest('button')) {
+      return
+    }
+    onProductClick?.(product)
+  }
+
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+    <div 
+      className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+      onClick={handleCardClick}
+    >
       <div className="h-64 bg-gray-200 dark:bg-gray-700 overflow-hidden">
         <img
           src={product.image}
@@ -26,7 +37,10 @@ function ProductCard({ product, onAddToCart }) {
             {formatPrice(product.price)}
           </span>
           <button
-            onClick={() => onAddToCart(product)}
+            onClick={(e) => {
+              e.stopPropagation()
+              onAddToCart(product)
+            }}
             className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
           >
             В корзину
