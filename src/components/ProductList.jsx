@@ -61,7 +61,7 @@ function ProductList({ onAddToCart }) {
           placeholder="Поиск товаров..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full max-w-md px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
         />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -75,7 +75,7 @@ function ProductList({ onAddToCart }) {
       </div>
       {filteredProducts.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-gray-500 text-lg">Товары не найдены</p>
+          <p className="text-gray-500 dark:text-gray-400 text-lg">Товары не найдены</p>
         </div>
       )}
     </div>

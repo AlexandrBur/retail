@@ -8,8 +8,8 @@ function ProductCard({ product, onAddToCart }) {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
-      <div className="h-64 bg-gray-200 overflow-hidden">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+      <div className="h-64 bg-gray-200 dark:bg-gray-700 overflow-hidden">
         <img
           src={product.image}
           alt={product.name}
@@ -17,12 +17,12 @@ function ProductCard({ product, onAddToCart }) {
         />
       </div>
       <div className="p-6">
-        <h3 className="text-xl font-semibold text-gray-800 mb-2">
+        <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">
           {product.name}
         </h3>
-        <p className="text-gray-600 text-sm mb-4">{product.description}</p>
+        <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">{product.description}</p>
         <div className="flex items-center justify-between">
-          <span className="text-2xl font-bold text-blue-600">
+          <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
             {formatPrice(product.price)}
           </span>
           <button
