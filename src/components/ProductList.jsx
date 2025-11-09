@@ -6,7 +6,7 @@ const products = [
     id: 1,
     name: 'Смартфон iPhone 15',
     price: 89990,
-    image: 'https://images.unsplash.com/photo-1592750475338-74b7bae85a96?w=400',
+    image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400',
     description: 'Новейший смартфон с отличной камерой'
   },
   {
