@@ -46,8 +46,17 @@ function ProductModal({ isOpen, onClose, product, onAddToCart }) {
     }).format(price)
   }
 
-  const handleAddToCart = () => {
-    onAddToCart(product)
+  const handleAddToCart = (e) => {
+    // Получаем позицию изображения в модальном окне
+    const imageElement = e.currentTarget.closest('.bg-white, .dark\\:bg-gray-800').querySelector('img')
+    const imageRect = imageElement?.getBoundingClientRect()
+    
+    const startPos = imageRect ? {
+      x: imageRect.left + imageRect.width / 2,
+      y: imageRect.top + imageRect.height / 2
+    } : null
+    
+    onAddToCart(product, startPos)
     onClose()
   }
 

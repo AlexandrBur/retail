@@ -1,9 +1,10 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import Header from './components/Header'
 import ProductList from './components/ProductList'
 import Cart from './components/Cart'
 import ToastContainer from './components/ToastContainer'
 import ProductModal from './components/ProductModal'
+import FlyingImage from './components/FlyingImage'
 
 const CART_STORAGE_KEY = 'internet-shop-cart'
 const THEME_STORAGE_KEY = 'internet-shop-theme'
@@ -20,6 +21,8 @@ function App() {
   })
   const [toasts, setToasts] = useState([])
   const [selectedProduct, setSelectedProduct] = useState(null)
+  const [flyingImage, setFlyingImage] = useState(null)
+  const isAnimatingRef = useRef(false)
 
   // Функция для добавления тоста
   const showToast = useCallback((message, type = 'success', duration = 3000) => {
@@ -63,29 +66,90 @@ function App() {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems))
   }, [cartItems])
 
-  const addToCart = (product) => {
+  const addToCart = (product, startPos = null) => {
     // Проверяем, есть ли товар в корзине перед обновлением
     const existingItem = cartItems.find(item => item.id === product.id)
     
-    setCartItems(prevItems => {
-      const item = prevItems.find(item => item.id === product.id)
-      if (item) {
-        return prevItems.map(item =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
+    // Запускаем анимацию, если передана начальная позиция
+    if (startPos) {
+      // Если анимация уже активна, пропускаем
+      if (isAnimatingRef.current) {
+        // Просто добавляем товар без анимации
+        setCartItems(prevItems => {
+          const item = prevItems.find(item => item.id === product.id)
+          if (item) {
+            return prevItems.map(item =>
+              item.id === product.id
+                ? { ...item, quantity: item.quantity + 1 }
+                : item
+            )
+          }
+          return [...prevItems, { ...product, quantity: 1 }]
+        })
+        if (existingItem) {
+          showToast(`Количество "${product.name}" увеличено в корзине`, 'success')
+        } else {
+          showToast(`"${product.name}" добавлен в корзину`, 'success')
+        }
+        return
       }
-      return [...prevItems, { ...product, quantity: 1 }]
-    })
-    
-    // Показываем уведомление один раз
-    if (existingItem) {
-      showToast(`Количество "${product.name}" увеличено в корзине`, 'success')
-    } else {
-      showToast(`"${product.name}" добавлен в корзину`, 'success')
+      
+      isAnimatingRef.current = true
+      
+      // Небольшая задержка для получения актуальной позиции кнопки корзины
+      setTimeout(() => {
+        const cartButton = document.querySelector('[data-cart-button]')
+        if (cartButton) {
+          const cartRect = cartButton.getBoundingClientRect()
+          const endPos = {
+            x: cartRect.left + cartRect.width / 2,
+            y: cartRect.top + cartRect.height / 2
+          }
+          
+          setFlyingImage({
+            id: Date.now() + Math.random(), // Уникальный ID для каждого изображения
+            src: product.image,
+            startPos,
+            endPos
+          })
+        } else {
+          // Если кнопка корзины не найдена, сбрасываем флаг
+          isAnimatingRef.current = false
+        }
+      }, 10)
     }
+    
+    // Обновляем корзину с небольшой задержкой для анимации
+    setTimeout(() => {
+      setCartItems(prevItems => {
+        const item = prevItems.find(item => item.id === product.id)
+        if (item) {
+          return prevItems.map(item =>
+            item.id === product.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          )
+        }
+        return [...prevItems, { ...product, quantity: 1 }]
+      })
+    }, startPos && isAnimatingRef.current ? 100 : 0)
+    
+    // Показываем уведомление после завершения анимации
+    setTimeout(() => {
+      if (existingItem) {
+        showToast(`Количество "${product.name}" увеличено в корзине`, 'success')
+      } else {
+        showToast(`"${product.name}" добавлен в корзину`, 'success')
+      }
+    }, startPos && isAnimatingRef.current ? 900 : 0)
   }
+
+  const handleFlyingImageComplete = useCallback(() => {
+    // Сбрасываем флаг анимации
+    isAnimatingRef.current = false
+    // Удаляем компонент сразу
+    setFlyingImage(null)
+  }, [])
 
   const removeFromCart = (productId) => {
     const item = cartItems.find(item => item.id === productId)
@@ -141,6 +205,15 @@ function App() {
         onAddToCart={addToCart}
       />
       <ToastContainer toasts={toasts} onRemove={removeToast} />
+      {flyingImage && (
+        <FlyingImage
+          key={flyingImage.id}
+          src={flyingImage.src}
+          startPos={flyingImage.startPos}
+          endPos={flyingImage.endPos}
+          onComplete={handleFlyingImageComplete}
+        />
+      )}
     </div>
   )
 }

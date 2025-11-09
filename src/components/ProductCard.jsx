@@ -39,7 +39,16 @@ function ProductCard({ product, onAddToCart, onProductClick }) {
           <button
             onClick={(e) => {
               e.stopPropagation()
-              onAddToCart(product)
+              const cardElement = e.currentTarget.closest('.bg-white, .dark\\:bg-gray-800')
+              const imageRect = cardElement?.querySelector('img')?.getBoundingClientRect()
+              
+              // Получаем позицию изображения товара
+              const startPos = imageRect ? {
+                x: imageRect.left + imageRect.width / 2,
+                y: imageRect.top + imageRect.height / 2
+              } : null
+              
+              onAddToCart(product, startPos)
             }}
             className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
           >
