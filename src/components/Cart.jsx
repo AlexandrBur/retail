@@ -103,7 +103,16 @@ function Cart({ isOpen, onClose, items, onRemove, onUpdateQuantity }) {
                     {formatPrice(total)}
                   </span>
                 </div>
-                <button className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium text-lg">
+                <button 
+                  onClick={() => {
+                    onClose()
+                    // Показываем тост через родительский компонент
+                    if (window.showOrderToast) {
+                      window.showOrderToast()
+                    }
+                  }}
+                  className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium text-lg"
+                >
                   Оформить заказ
                 </button>
               </div>
