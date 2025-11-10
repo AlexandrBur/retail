@@ -6,42 +6,42 @@ const products = [
     id: 1,
     name: 'Смартфон iPhone 15',
     price: 89990,
-    image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400',
+    image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&auto=format&fit=crop',
     description: 'Новейший смартфон с отличной камерой'
   },
   {
     id: 2,
     name: 'Ноутбук MacBook Pro',
     price: 149990,
-    image: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=400',
+    image: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=400&auto=format&fit=crop',
     description: 'Мощный ноутбук для работы и творчества'
   },
   {
     id: 3,
     name: 'Наушники AirPods Pro',
     price: 24990,
-    image: 'https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=400',
+    image: 'https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=400&auto=format&fit=crop',
     description: 'Беспроводные наушники с шумоподавлением'
   },
   {
     id: 4,
     name: 'Умные часы Apple Watch',
     price: 34990,
-    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400',
+    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&auto=format&fit=crop',
     description: 'Фитнес-трекер и умные часы'
   },
   {
     id: 5,
     name: 'Планшет iPad Air',
     price: 59990,
-    image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400',
+    image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&auto=format&fit=crop',
     description: 'Легкий и мощный планшет'
   },
   {
     id: 6,
     name: 'Камера Canon EOS',
     price: 79990,
-    image: 'https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400',
+    image: 'https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400&auto=format&fit=crop',
     description: 'Профессиональная зеркальная камера'
   },
 ]

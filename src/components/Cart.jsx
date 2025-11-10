@@ -45,6 +45,11 @@ function Cart({ isOpen, onClose, items, onRemove, onUpdateQuantity }) {
                       src={item.image}
                       alt={item.name}
                       className="w-20 h-20 object-cover rounded"
+                      onError={(e) => {
+                        e.target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect fill='%23e5e7eb' width='80' height='80'/%3E%3Ctext fill='%239ca3af' font-family='sans-serif' font-size='12' dy='6' font-weight='bold' x='50%25' y='50%25' text-anchor='middle'%3E${encodeURIComponent(item.name)}%3C/text%3E%3C/svg%3E`
+                      }}
+                      loading="lazy"
+                      decoding="async"
                     />
                     <div className="flex-1">
                       <h3 className="font-semibold text-gray-800 dark:text-white">

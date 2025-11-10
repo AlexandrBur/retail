@@ -111,6 +111,10 @@ function FlyingImage({ src, startPos, endPos, onComplete }) {
             borderRadius: '12px',
             filter: 'drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3))'
           }}
+          onError={(e) => {
+            // Fallback для летящего изображения
+            e.target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect fill='%23e5e7eb' width='80' height='80'/%3E%3C/svg%3E`
+          }}
         />
         <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-blue-500/20 to-transparent pointer-events-none" />
       </div>

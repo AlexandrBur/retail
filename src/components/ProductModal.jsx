@@ -1,7 +1,9 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 function ProductModal({ isOpen, onClose, product, onAddToCart }) {
   const modalRef = useRef(null)
+  const [imageError, setImageError] = useState(false)
+  const [imageLoaded, setImageLoaded] = useState(false)
 
   // Закрытие по клавише Escape и фокус-трап
   useEffect(() => {
@@ -60,6 +62,25 @@ function ProductModal({ isOpen, onClose, product, onAddToCart }) {
     onClose()
   }
 
+  const handleImageError = () => {
+    setImageError(true)
+  }
+
+  const handleImageLoad = () => {
+    setImageLoaded(true)
+  }
+
+  // Fallback изображение
+  const fallbackImage = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e5e7eb' width='400' height='400'/%3E%3Ctext fill='%239ca3af' font-family='sans-serif' font-size='20' dy='10.5' font-weight='bold' x='50%25' y='50%25' text-anchor='middle'%3E${encodeURIComponent(product.name)}%3C/text%3E%3C/svg%3E`
+
+  // Сбрасываем состояние при открытии модального окна
+  useEffect(() => {
+    if (isOpen && product) {
+      setImageError(false)
+      setImageLoaded(false)
+    }
+  }, [isOpen, product])
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm animate-fade-in"
@@ -97,11 +118,21 @@ function ProductModal({ isOpen, onClose, product, onAddToCart }) {
                   />
                 </svg>
               </button>
-              <div className="h-96 bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden shadow-inner">
+              <div className="h-96 bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden shadow-inner relative">
+                {!imageLoaded && !imageError && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="animate-pulse bg-gray-300 dark:bg-gray-600 w-full h-full"></div>
+                  </div>
+                )}
                 <img
-                  src={product.image}
+                  src={imageError ? fallbackImage : product.image}
                   alt={product.name}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  className={`w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  onError={handleImageError}
+                  onLoad={handleImageLoad}
+                  loading="eager"
+                  decoding="async"
+                  referrerPolicy="no-referrer"
                 />
               </div>
             </div>
