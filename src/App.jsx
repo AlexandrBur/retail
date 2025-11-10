@@ -198,12 +198,14 @@ function App() {
         onRemove={removeFromCart}
         onUpdateQuantity={updateQuantity}
       />
-      <ProductModal
-        isOpen={selectedProduct !== null}
-        onClose={() => setSelectedProduct(null)}
-        product={selectedProduct}
-        onAddToCart={addToCart}
-      />
+      {selectedProduct && (
+        <ProductModal
+          isOpen={true}
+          onClose={() => setSelectedProduct(null)}
+          product={selectedProduct}
+          onAddToCart={addToCart}
+        />
+      )}
       <ToastContainer toasts={toasts} onRemove={removeToast} />
       {flyingImage && (
         <FlyingImage

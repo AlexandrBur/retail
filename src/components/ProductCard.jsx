@@ -17,7 +17,10 @@ function ProductCard({ product, onAddToCart, onProductClick }) {
     if (e.target.closest('button')) {
       return
     }
-    onProductClick?.(product)
+    // Проверяем, что product существует и onProductClick передана
+    if (product && onProductClick) {
+      onProductClick(product)
+    }
   }
 
   const handleImageError = () => {

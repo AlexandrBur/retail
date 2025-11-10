@@ -38,7 +38,9 @@ function ProductModal({ isOpen, onClose, product, onAddToCart }) {
     }
   }
 
-  if (!isOpen || !product) return null
+  if (!isOpen || !product) {
+    return null
+  }
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('ru-RU', {
@@ -49,8 +51,11 @@ function ProductModal({ isOpen, onClose, product, onAddToCart }) {
   }
 
   const handleAddToCart = (e) => {
+    if (!product) return
+    
     // Получаем позицию изображения в модальном окне
-    const imageElement = e.currentTarget.closest('.bg-white, .dark\\:bg-gray-800').querySelector('img')
+    const modalElement = e.currentTarget.closest('[role="dialog"]')
+    const imageElement = modalElement?.querySelector('img')
     const imageRect = imageElement?.getBoundingClientRect()
     
     const startPos = imageRect ? {
@@ -70,8 +75,8 @@ function ProductModal({ isOpen, onClose, product, onAddToCart }) {
     setImageLoaded(true)
   }
 
-  // Fallback изображение
-  const fallbackImage = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e5e7eb' width='400' height='400'/%3E%3Ctext fill='%239ca3af' font-family='sans-serif' font-size='20' dy='10.5' font-weight='bold' x='50%25' y='50%25' text-anchor='middle'%3E${encodeURIComponent(product.name)}%3C/text%3E%3C/svg%3E`
+  // Fallback изображение (вычисляется только если product существует)
+  const fallbackImage = product ? `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e5e7eb' width='400' height='400'/%3E%3Ctext fill='%239ca3af' font-family='sans-serif' font-size='20' dy='10.5' font-weight='bold' x='50%25' y='50%25' text-anchor='middle'%3E${encodeURIComponent(product.name || 'Товар')}%3C/text%3E%3C/svg%3E` : ''
 
   // Сбрасываем состояние при открытии модального окна
   useEffect(() => {
@@ -125,8 +130,8 @@ function ProductModal({ isOpen, onClose, product, onAddToCart }) {
                   </div>
                 )}
                 <img
-                  src={imageError ? fallbackImage : product.image}
-                  alt={product.name}
+                  src={imageError ? fallbackImage : (product?.image || fallbackImage)}
+                  alt={product?.name || 'Товар'}
                   className={`w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
                   onError={handleImageError}
                   onLoad={handleImageLoad}
@@ -140,19 +145,19 @@ function ProductModal({ isOpen, onClose, product, onAddToCart }) {
             {/* Информация о товаре */}
             <div className="flex flex-col">
               <h2 id="modal-title" className="text-3xl font-bold text-gray-800 dark:text-white mb-4">
-                {product.name}
+                {product?.name || 'Товар'}
               </h2>
               
               <div className="mb-6">
                 <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
-                  {product.description}
+                  {product?.description || ''}
                 </p>
               </div>
 
               <div className="mt-auto space-y-6">
                 <div className="flex items-center gap-4">
                   <span className="text-4xl font-bold text-blue-600 dark:text-blue-400">
-                    {formatPrice(product.price)}
+                    {formatPrice(product?.price || 0)}
                   </span>
                 </div>
 
